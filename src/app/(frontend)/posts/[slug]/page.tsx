@@ -26,7 +26,7 @@ export async function generateStaticParams() {
     },
   })
 
-  return posts.docs.map(({ slug }) => { slug })
+  return posts.docs
 }
 
 type Args = {
