@@ -260,7 +260,7 @@ export interface Post {
  */
 export interface Media {
   id: number;
-  alt?: string | null;
+  alt: string;
   caption?: {
     root: {
       type: string;
@@ -374,6 +374,7 @@ export interface Category {
 export interface User {
   id: number;
   name?: string | null;
+  roles?: ('super-admin' | 'user')[] | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -1274,6 +1275,7 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;

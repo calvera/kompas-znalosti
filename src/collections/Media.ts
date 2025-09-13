@@ -8,8 +8,8 @@ import {
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { isSuperAdminAccess } from '@/access/isSuperAdmin'
+import { anyone } from '@/access/anyone'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -17,16 +17,16 @@ const dirname = path.dirname(filename)
 export const Media: CollectionConfig = {
   slug: 'media',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: isSuperAdminAccess,
+    delete: isSuperAdminAccess,
     read: anyone,
-    update: authenticated,
+    update: isSuperAdminAccess,
   },
   fields: [
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      required: true,
     },
     {
       name: 'caption',

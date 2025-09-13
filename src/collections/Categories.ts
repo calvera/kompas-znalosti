@@ -1,16 +1,16 @@
 import type { CollectionConfig } from 'payload'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
+import { anyone } from '@/access/anyone'
 import { slugField } from '@/fields/slug'
+import { isSuperAdminAccess } from '@/access/isSuperAdmin'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
   access: {
-    create: authenticated,
-    delete: authenticated,
+    create: isSuperAdminAccess,
+    delete: isSuperAdminAccess,
     read: anyone,
-    update: authenticated,
+    update: isSuperAdminAccess,
   },
   admin: {
     useAsTitle: 'title',

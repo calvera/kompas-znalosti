@@ -34,7 +34,7 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
   })
 
   const handleGenerate = useCallback(
-    (e: React.MouseEvent<Element>) => {
+    (e: React.MouseEvent) => {
       e.preventDefault()
 
       const targetFieldValue = getDataByPath(fieldToUse) as string
@@ -51,7 +51,7 @@ export const SlugComponent: React.FC<SlugComponentProps> = ({
   )
 
   const handleLock = useCallback(
-    (e: React.MouseEvent<Element>) => {
+    (e: React.MouseEvent) => {
       e.preventDefault()
 
       dispatchFields({

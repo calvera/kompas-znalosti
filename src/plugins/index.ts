@@ -13,6 +13,8 @@ import { beforeSyncWithSearch } from '@/search/beforeSync'
 
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import { isSuperAdminAccess } from '@/access/isSuperAdmin'
+import { anyone } from '@/access/anyone'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -28,6 +30,12 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
+      access: {
+        create: isSuperAdminAccess,
+        delete: isSuperAdminAccess,
+        read: anyone,
+        update: isSuperAdminAccess,
+      },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
@@ -60,6 +68,12 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      access: {
+        create: isSuperAdminAccess,
+        delete: isSuperAdminAccess,
+        read: anyone,
+        update: isSuperAdminAccess,
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
@@ -85,6 +99,12 @@ export const plugins: Plugin[] = [
     collections: ['posts'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
+      access: {
+        create: isSuperAdminAccess,
+        delete: isSuperAdminAccess,
+        read: anyone,
+        update: isSuperAdminAccess,
+      },
       fields: ({ defaultFields }) => {
         return [...defaultFields, ...searchFields]
       },
