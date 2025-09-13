@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="193" height="34" viewBox="0 0 193 34" role="img" aria-labelledby="title desc">
+  <title id="title">Kompas znalosti – logo</title>
+  <desc id="desc">Plná, geometrická ikona kompasu a nápis Kompas znalosti v jednom řádku</desc>
+
+  <!-- Ikona kompasu: plný prstenec + plná jehla, bez tenkých linek -->
+  <g transform="translate(3,3)" fill="currentColor">
+    <!-- Prstenec (donut) -->
+    <path fill-rule="evenodd" d="
+      M14 0
+      a14 14 0 1 1 0 28
+      a14 14 0 1 1 0 -28
+      M14 4.5
+      a9.5 9.5 0 1 0 0 19
+      a9.5 9.5 0 1 0 0 -19
+    " clip-rule="evenodd"/>
+    <!-- Jehla (plná, orientovaná na severovýchod) -->
+    <path d="M14 6.8 L22 14 L14 21.2 L10.6 14 Z"/>
+    <!-- Středová tečka -->
+    <circle cx="14" cy="14" r="1.8"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g fill="currentColor" aria-hidden="true">
+    <text x="40" y="23" font-weight="800" font-size="16" font-family="system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif" letter-spacing="0.2">
+      <tspan>Kompas znalostí</tspan>
+    </text>
+  </g>
+</svg>
