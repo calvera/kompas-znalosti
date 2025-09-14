@@ -16,6 +16,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Questions, QuestionSets, QuestionTopics } from '@/collections/Questions'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -60,9 +61,9 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || '',
     },
-    push: false
+    push: false,
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Media, Categories, Users, Questions, QuestionTopics, QuestionSets],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -90,6 +91,10 @@ export default buildConfig({
     tasks: [],
   },
   graphQL: {
-    disable: true
-  }
+    disable: true,
+  },
+  localization: {
+    locales: ['cs'],
+    defaultLocale: 'cs',
+  },
 })
