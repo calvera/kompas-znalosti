@@ -5,7 +5,7 @@ import configPromise from '@payload-config'
 import { CMSLink } from '@/components/Link'
 import { QuestionTopic } from '@/payload-types'
 import { RenderHero } from '@/heros/RenderHero'
-import React from 'react'
+import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
@@ -14,11 +14,10 @@ type Args = {
   }>
 }
 
-export default async function Page({ params: paramsPromise }: Args) {
-  const { slug = '' } = await paramsPromise
-
+const getQuestionSet = cache(async (slug: string) => {
   const payload = await getPayload({ config: configPromise })
-  const questionSet = (
+
+  return (
     await payload.find({
       collection: 'questionSets',
       limit: 1,
@@ -30,6 +29,11 @@ export default async function Page({ params: paramsPromise }: Args) {
       },
     })
   ).docs[0]
+})
+
+export default async function Page({ params: paramsPromise }: Args) {
+  const { slug = '' } = await paramsPromise
+  const questionSet = await getQuestionSet(slug)
 
   const topicsList = questionSet.topics!.docs! as QuestionTopic[]
   return (
@@ -37,10 +41,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       <RenderHero {...questionSet.hero} />
       <h2>{questionSet.title}</h2>
       <div className="pt-24 pb-24">
-        <RichText
-          data={questionSet.description}
-          enableGutter={false}
-        />
+        <RichText data={questionSet.description} enableGutter={false} />
         {topicsList.map(({ slug: topicSlug, title }) => (
           <div key={topicSlug}>
             <CMSLink url={`/uceni/${slug}/${topicSlug}`}>{title}</CMSLink>
@@ -48,29 +49,13 @@ export default async function Page({ params: paramsPromise }: Args) {
         ))}
       </div>
     </div>
-)
+  )
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
 
-  const payload = await getPayload({ config: configPromise })
-  const questionSet = (
-    await payload.find({
-      collection: 'questionSets',
-      limit: 1,
-      depth: 0,
-      where: {
-        slug: {
-          equals: slug,
-        },
-      },
-      select: {
-        title: true,
-        meta: true,
-      },
-    })
-  ).docs[0]
+  const questionSet = await getQuestionSet(slug)
 
   return generateMeta({ doc: questionSet })
 }
