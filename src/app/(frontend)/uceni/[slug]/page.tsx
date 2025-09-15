@@ -52,6 +52,25 @@ export default async function Page({ params: paramsPromise }: Args) {
   )
 }
 
+// ISR: statically generate with incremental revalidation
+export const revalidate = 600
+
+// Pre-generate all /uceni/[slug] pages at build time
+export async function generateStaticParams() {
+  const payload = await getPayload({ config: configPromise })
+  const questionSets = (
+    await payload.find({
+      collection: 'questionSets',
+      depth: 0,
+      limit: 1000,
+    })
+  ).docs as { slug: string }[]
+
+  return questionSets
+    .filter(({ slug }) => Boolean(slug))
+    .map(({ slug }) => ({ slug }))
+}
+
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
 
