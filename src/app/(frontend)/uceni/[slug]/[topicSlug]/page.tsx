@@ -8,14 +8,13 @@ type Args = {
   params: Promise<{
     slug?: string
     topicSlug?: string
-    question: number
   }>
 }
 
 export default async function Page({ params: paramsPromise }: Args) {
   const payload = await getPayload({ config: configPromise })
 
-  const { slug, topicSlug, question = 1 } = await paramsPromise
+  const { slug, topicSlug } = await paramsPromise
 
   const questionTopic = (
     await payload.find({
@@ -58,7 +57,6 @@ export default async function Page({ params: paramsPromise }: Args) {
       questionSet={questionTopic.questionSet as QuestionSet}
       questionTopic={questionTopic}
       questions={questions}
-      number={question}
     />
   )
 }

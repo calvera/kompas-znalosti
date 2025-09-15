@@ -5,20 +5,21 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { LowImpactHero } from '@/heros/LowImpact'
 import RichText from '@/components/RichText'
 import { cn } from '@/utilities/ui'
+import { useSearchParams } from 'next/navigation'
 
 type Args = {
   questionSet: QuestionSet
   questionTopic: QuestionTopic
   questions: Question[]
-  number: number
 }
 
-export default function ClientPage({ questionSet, questionTopic, questions, number }: Args) {
-  const buildedQuestions = useMemo(() => {
+export default function ClientPage({ questionSet, questionTopic, questions }: Args) {
+  const buildQuestions = useMemo(() => {
     return buildQuizItems(questions)
   }, [questions])
 
-  const [questionNumber, setQuestionNumber] = useState(number)
+  const q = useSearchParams().get('q')
+  const [questionNumber, setQuestionNumber] = useState(q ? parseInt(q) : 1)
   const [answered, setAnswered] = useState<string[]>([])
   const timeoutRef = useRef<number | null>(null)
 
@@ -32,11 +33,11 @@ export default function ClientPage({ questionSet, questionTopic, questions, numb
   }, [])
 
   function prevHandler() {
-    setQuestionNumber(Math.max(1, questionNumber - 1))
+    setQuestionNumber((prev) => Math.max(1, prev - 1))
   }
 
   function nextHandler() {
-    setQuestionNumber(Math.min(buildedQuestions.length, questionNumber + 1))
+    setQuestionNumber((prev) => Math.min(buildQuestions.length, prev + 1))
   }
 
   function answerHandler(answerId: string) {
@@ -51,9 +52,13 @@ export default function ClientPage({ questionSet, questionTopic, questions, numb
       clearTimeout(timeoutRef.current)
     }
     timeoutRef.current = window.setTimeout(() => {
-      setQuestionNumber((curr) => Math.min(buildedQuestions.length, curr + 1))
+      setQuestionNumber((curr) => Math.min(buildQuestions.length, curr + 1))
     }, 500)
   }
+
+  useEffect(() => {
+    window?.history.pushState(null, '', `?q=${questionNumber}`)
+  }, [questionNumber])
 
   return (
     <>
@@ -64,12 +69,12 @@ export default function ClientPage({ questionSet, questionTopic, questions, numb
       <div className="container">
         <div className="max-w-[48rem]">
           <p className="text-lg font-medium">
-            {questionNumber}. {buildedQuestions[questionNumber - 1].title}
+            {questionNumber}. {buildQuestions[questionNumber - 1].title}
           </p>
           <div className="mt-4 ml-4">
-            {buildedQuestions[questionNumber - 1].answers.map((answer) => {
+            {buildQuestions[questionNumber - 1].answers.map((answer) => {
               const selectedAnswerId = answered[questionNumber - 1]
-              const isCorrectSelection = selectedAnswerId === buildedQuestions[questionNumber - 1].correctId
+              const isCorrectSelection = selectedAnswerId === buildQuestions[questionNumber - 1].correctId
               const isSelected = selectedAnswerId === answer.id
 
               return (
