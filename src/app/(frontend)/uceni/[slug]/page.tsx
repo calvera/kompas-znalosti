@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import RichText from '@/components/RichText'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
@@ -5,6 +6,7 @@ import { CMSLink } from '@/components/Link'
 import { QuestionTopic } from '@/payload-types'
 import { RenderHero } from '@/heros/RenderHero'
 import React from 'react'
+import { generateMeta } from '@/utilities/generateMeta'
 
 type Args = {
   params: Promise<{
@@ -47,4 +49,28 @@ export default async function Page({ params: paramsPromise }: Args) {
       </div>
     </div>
 )
+}
+
+export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  const { slug = '' } = await paramsPromise
+
+  const payload = await getPayload({ config: configPromise })
+  const questionSet = (
+    await payload.find({
+      collection: 'questionSets',
+      limit: 1,
+      depth: 0,
+      where: {
+        slug: {
+          equals: slug,
+        },
+      },
+      select: {
+        title: true,
+        meta: true,
+      },
+    })
+  ).docs[0]
+
+  return generateMeta({ doc: questionSet })
 }
