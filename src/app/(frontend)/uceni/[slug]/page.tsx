@@ -42,7 +42,7 @@ export default async function Page({ params: paramsPromise }: Args) {
           enableGutter={false}
         />
         {topicsList.map(({ slug: topicSlug, title }) => (
-          <div key={slug}>
+          <div key={topicSlug}>
             <CMSLink url={`/uceni/${slug}/${topicSlug}`}>{title}</CMSLink>
           </div>
         ))}
