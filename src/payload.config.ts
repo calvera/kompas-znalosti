@@ -17,6 +17,8 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Questions, QuestionSets, QuestionTopics } from '@/collections/Questions'
+import { cs } from '@payloadcms/translations/languages/cs'
+import { en } from '@payloadcms/translations/languages/en'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -97,4 +99,8 @@ export default buildConfig({
     locales: ['cs'],
     defaultLocale: 'cs',
   },
+  i18n: {
+    fallbackLanguage: 'en',
+    supportedLanguages: {cs, en}
+  }
 })
